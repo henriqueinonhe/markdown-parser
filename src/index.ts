@@ -99,7 +99,7 @@ const parseHeadingChildNode = (markdown: string, index: number) => {
   index = ignoreLeadingNonLineBreakWhitespace(markdown, index);
 };
 
-const ignoreLeadingWhitespace = (markdown: string, index: number) => {
+export const ignoreLeadingWhitespace = (markdown: string, index: number) => {
   while (isWhitespace(markdown[index])) {
     index++;
   }
@@ -107,7 +107,7 @@ const ignoreLeadingWhitespace = (markdown: string, index: number) => {
   return index;
 };
 
-const ignoreLeadingNonLineBreakWhitespace = (
+export const ignoreLeadingNonLineBreakWhitespace = (
   markdown: string,
   index: number,
 ) => {
@@ -136,4 +136,4 @@ const isLineBreak = (character: string) => {
   return character === "\n";
 };
 
-main();
+// main();
