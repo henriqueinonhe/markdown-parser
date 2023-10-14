@@ -1,8 +1,8 @@
-import { readFile } from "fs/promises";
 import { describe, it, expect, vi } from "vitest";
 import { makeParseNode } from "./parseNode";
 import { TentativelyParseHeading } from "./tentativelyParseHeading";
 import { ParseParagraph } from "./parseParagraph";
+import { loadMarkdownFromFixture } from "./testHelpers/loadMarkdownFromFixture";
 
 type SetupParams = {
   startingIndex: number;
@@ -15,10 +15,7 @@ const setup = async ({
   parseParagraph,
   tentativelyParseHeading,
 }: SetupParams) => {
-  const markdown = await readFile(
-    "./src/fixtures/parseNodeTestMarkdown.md",
-    "utf-8",
-  );
+  const markdown = await loadMarkdownFromFixture("parseNode");
 
   const parseNode = makeParseNode({
     tentativelyParseHeading,

@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { makeParse } from "./parse";
 import ast from "./fixtures/parseTestAst";
 import { readFile } from "fs/promises";
+import { loadMarkdownFromFixture } from "./testHelpers/loadMarkdownFromFixture";
 
 describe("Generic test", () => {
   const setup = async () => {
@@ -20,10 +21,7 @@ describe("Generic test", () => {
       parseNode,
     });
 
-    const markdown = await readFile(
-      "./src/fixtures/parseTestMarkdown.md",
-      "utf-8",
-    );
+    const markdown = await loadMarkdownFromFixture("parse");
 
     const result = parse(markdown);
 
