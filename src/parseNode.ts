@@ -1,68 +1,49 @@
+import { ParseParagraph } from "./parseParagraph";
+import {
+  isPossiblyHeadingStart,
+  isPossiblyOrderedListStart,
+  isPossiblyUnorderedListOrHorizontalRuleStart,
+} from "./singleCharacterChecks";
+import { TentativelyParseHeading } from "./tentativelyParseHeading";
+
 type Dependencies = {
-  isPossiblyHeadingStart: (character: string) => boolean;
-  tentativelyParseHeading: (
-    markdown: string,
-    index: number,
-  ) =>
-    | {
-        status: "Success";
-        node: any;
-        newIndex: number;
-      }
-    | {
-        status: "Fail";
-        content: string;
-        newIndex: number;
-      };
-  parseParagraph: (
-    markdown: string,
-    index: number,
-    alreadyReadContent?: string,
-  ) => {
-    node: any;
-    newIndex: number;
-  };
-  isPossiblyUnorderedListStart: (character: string) => boolean;
-  tentativelyParseUnorderedList: (
-    markdown: string,
-    index: number,
-  ) =>
-    | {
-        status: "Success";
-        node: any;
-        newIndex: number;
-      }
-    | {
-        status: "Fail";
-        content: string;
-        newIndex: number;
-      };
-  isPossiblyOrderedListStart: (character: string) => boolean;
-  tentativelyParseOrderedList: (
-    markdown: string,
-    index: number,
-  ) =>
-    | {
-        status: "Success";
-        node: any;
-        newIndex: number;
-      }
-    | {
-        status: "Fail";
-        content: string;
-        newIndex: number;
-      };
+  tentativelyParseHeading: TentativelyParseHeading;
+  parseParagraph: ParseParagraph;
+  // tentativelyParseUnorderedList: (
+  //   markdown: string,
+  //   index: number,
+  // ) =>
+  //   | {
+  //       status: "Success";
+  //       node: any;
+  //       newIndex: number;
+  //     }
+  //   | {
+  //       status: "Fail";
+  //       content: string;
+  //       newIndex: number;
+  //     };
+  // tentativelyParseOrderedList: (
+  //   markdown: string,
+  //   index: number,
+  // ) =>
+  //   | {
+  //       status: "Success";
+  //       node: any;
+  //       newIndex: number;
+  //     }
+  //   | {
+  //       status: "Fail";
+  //       content: string;
+  //       newIndex: number;
+  //     };
 };
 
 export const makeParseNode =
   ({
-    isPossiblyHeadingStart,
     tentativelyParseHeading,
-    parseParagraph,
-    isPossiblyUnorderedListStart,
-    tentativelyParseUnorderedList,
-    isPossiblyOrderedListStart,
-    tentativelyParseOrderedList,
+    parseParagraph, // tentativelyParseUnorderedList,
+    // tentativelyParseOrderedList,
   }: Dependencies) =>
   (markdown: string, index: number) => {
     let content = "";
@@ -83,35 +64,40 @@ export const makeParseNode =
       return parseParagraph(markdown, index, content);
     }
 
-    if (isPossiblyUnorderedListStart(markdown[index])) {
-      const result = tentativelyParseUnorderedList(markdown, index);
+    // if (isPossiblyUnorderedListOrHorizontalRuleStart(markdown[index])) {
+    //   const result = tentativelyParseUnorderedList(markdown, index);
 
-      if (result.status === "Success") {
-        return {
-          node: result.node,
-          newIndex: result.newIndex,
-        };
-      }
+    //   if (result.status === "Success") {
+    //     return {
+    //       node: result.node,
+    //       newIndex: result.newIndex,
+    //     };
+    //   }
 
-      content = result.content;
-      index = result.newIndex;
+    //   content = result.content;
+    //   index = result.newIndex;
 
-      return parseParagraph(markdown, index, content);
-    }
+    //   return parseParagraph(markdown, index, content);
+    // }
 
-    if (isPossiblyOrderedListStart(markdown[index])) {
-      const result = tentativelyParseOrderedList(markdown, index);
+    // if (isPossiblyOrderedListStart(markdown[index])) {
+    //   const result = tentativelyParseOrderedList(markdown, index);
 
-      if (result.status === "Success") {
-        return {
-          node: result.node,
-          newIndex: result.newIndex,
-        };
-      }
+    //   if (result.status === "Success") {
+    //     return {
+    //       node: result.node,
+    //       newIndex: result.newIndex,
+    //     };
+    //   }
 
-      content = result.content;
-      index = result.newIndex;
+    //   content = result.content;
+    //   index = result.newIndex;
 
-      return parseParagraph(markdown, index, content);
-    }
+    //   return parseParagraph(markdown, index, content);
+    // }
+
+    // After everything has been tried
+    // we fall back to a paragraph
+
+    return parseParagraph(markdown, index);
   };

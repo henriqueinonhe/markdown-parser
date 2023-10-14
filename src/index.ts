@@ -73,22 +73,4 @@ export const ignoreLeadingNonLineBreakWhitespace = (
   return index;
 };
 
-const isPossibleHeadingStart = (character: string) => {
-  return character === "#";
-};
-
-const isWhitespace = (character: string) => {
-  // Should we consider CRLF here?
-  return character === " " || character === "\n" || character === "\t";
-};
-
-const isNonLineBreakWhitespace = (character: string) => {
-  return character === " " || character === "\t";
-};
-
-const isLineBreak = (character: string) => {
-  // Should we consider CRLF here?
-  return character === "\n";
-};
-
 // main();
