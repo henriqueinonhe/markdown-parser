@@ -1,5 +1,7 @@
 # Promises Training
 
+# Promises Training **bold** _italic_ _italic-alt_ `code` **_bold-italic_** _**italic-bold**_
+
 > [!WARNING]  
 > DO NOT INSTALL THIS PACKAGE AS A DEPENDENCY! (See: [Getting Started](#getting-started))
 

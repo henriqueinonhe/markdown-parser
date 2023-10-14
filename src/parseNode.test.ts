@@ -3,7 +3,7 @@ import { makeParseNode } from "./parseNode";
 import { makeTentativelyParseHeading } from "./tentativelyParseHeading";
 import { ParseParagraph } from "./parseParagraph";
 import { loadMarkdownFromFixture } from "./testHelpers/loadMarkdownFromFixture";
-import { ParseHeadingChildNode } from "./parseHeadingChildNode";
+import { ParseHeadingChildNode } from "./parseHeadingChildNodes";
 import { mockFnThatShouldntBeCalled } from "./testHelpers/mockFnThatShouldntBeCalled";
 
 type SetupParams = {

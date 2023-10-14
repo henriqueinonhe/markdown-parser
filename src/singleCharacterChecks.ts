@@ -41,3 +41,15 @@ export const isPossiblyImageStart = (character: string) => {
 export const isPossiblyCommentStart = (character: string) => {
   return character === "<";
 };
+
+export const isPossiblyStrongOrEmStart = (character: string) => {
+  return character === "*";
+};
+
+export const isPossiblyEmOnlyStart = (character: string) => {
+  return character === "_";
+};
+
+export const isPossiblyInlineCodeStart = (character: string) => {
+  return character === "`";
+};

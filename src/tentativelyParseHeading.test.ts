@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { ParseHeadingChildNode } from "./parseHeadingChildNode";
+import { ParseHeadingChildNode } from "./parseHeadingChildNodes";
 import {
   TentativelyParseHeading,
   makeTentativelyParseHeading,
@@ -338,6 +338,32 @@ describe("When parsing a line that starts with a hash sequence but doesn't have 
         content: "######",
         newIndex: 178,
       },
+    });
+  });
+});
+
+describe("When parsing a line that is a heading but has no characters other then a line break", () => {
+  const secondSetup = () => {
+    const startIndex = 231;
+    const parseHeadingChildNode = mockFnThatShouldntBeCalled;
+
+    return setup({
+      parseHeadingChildNode,
+      startIndex,
+    });
+  };
+
+  it("Succeeds in parsing and returns the parsed node and new index", async () => {
+    const { result } = await secondSetup();
+
+    expect(result).toEqual({
+      status: "Success",
+      node: {
+        type: "heading",
+        depth: 1,
+        children: [],
+      },
+      newIndex: 232,
     });
   });
 });

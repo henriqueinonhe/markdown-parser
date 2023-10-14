@@ -1,13 +1,17 @@
-import { ParseHeadingChildNode } from "./parseHeadingChildNode";
-import { isLineBreak, isNonLineBreakWhitespace } from "./singleCharacterChecks";
+import { ignoreLeadingNonLineBreakWhitespace } from "./ignoreLeadingNonLineBreakWhitespace";
+import { ParseHeadingChildNodes } from "./parseHeadingChildNodes";
+import { isNonLineBreakWhitespace } from "./singleCharacterChecks";
 
 type Dependencies = {
-  parseHeadingChildNode: ParseHeadingChildNode;
+  parseHeadingChildNodes: ParseHeadingChildNodes;
 };
 
 export const makeTentativelyParseHeading =
-  ({ parseHeadingChildNode }: Dependencies) =>
+  ({ parseHeadingChildNodes }: Dependencies) =>
   (markdown: string, index: number) => {
+    // Receives index at the SECOND character
+    // of the posible heading, after the first hash
+
     // If we got here it means that we've already
     // read the first hash
     let content = "#";
@@ -31,23 +35,20 @@ export const makeTentativelyParseHeading =
       };
     }
 
-    const children = [];
+    // Moving to next character past the whitespace
+    index++;
+    index = ignoreLeadingNonLineBreakWhitespace(markdown, index);
 
-    while (!isLineBreak(markdown[index])) {
-      const { node, newIndex } = parseHeadingChildNode(markdown, index);
-
-      children.push(node);
-      index = newIndex;
-    }
+    const { nodes, newIndex } = parseHeadingChildNodes(markdown, index);
 
     return {
       status: "Success" as const,
       node: {
         type: "heading",
         depth,
-        children,
+        children: nodes,
       },
-      newIndex: index,
+      newIndex,
     };
   };
 
