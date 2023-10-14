@@ -57,7 +57,7 @@ describe("When parsing a heading", () => {
         depth: 1,
         children: [{ type: "text", content: "h1 Heading " }],
       },
-      newIndex: 14,
+      newIndex: 20,
     });
     const parseParagraph = vi.fn();
 
@@ -69,7 +69,7 @@ describe("When parsing a heading", () => {
   };
 
   test({
-    expectedNewIndex: 14,
+    expectedNewIndex: 20,
     expectedNode: {
       type: "heading",
       depth: 1,
@@ -81,11 +81,11 @@ describe("When parsing a heading", () => {
 
 describe("When parsing something that looks like a heading but it's not", () => {
   const secondSetup = () => {
-    const startingIndex = 100;
+    const startingIndex = 106;
     const tentativelyParseHeading = vi.fn().mockReturnValue({
       status: "Fail",
       content: "#",
-      newIndex: 101,
+      newIndex: 107,
     });
     const parseParagraph = vi.fn().mockReturnValue({
       node: {
@@ -94,7 +94,7 @@ describe("When parsing something that looks like a heading but it's not", () => 
           { type: "text", content: "#Looks like a heading but it's not" },
         ],
       },
-      newIndex: 135,
+      newIndex: 141,
     });
 
     return setup({
@@ -105,7 +105,7 @@ describe("When parsing something that looks like a heading but it's not", () => 
   };
 
   test({
-    expectedNewIndex: 135,
+    expectedNewIndex: 141,
     expectedNode: {
       type: "paragraph",
       children: [
@@ -118,7 +118,7 @@ describe("When parsing something that looks like a heading but it's not", () => 
 
 describe("When parsing a paragraph that looks like a paragraph from the very beginning", () => {
   const secontSetup = () => {
-    const startingIndex = 136;
+    const startingIndex = 142;
     const tentativelyParseHeading = vi.fn().mockImplementation(() => {
       throw new Error("Should not be called!");
     });
@@ -127,7 +127,7 @@ describe("When parsing a paragraph that looks like a paragraph from the very beg
         type: "paragraph",
         children: [{ type: "text", content: "Some paragraph" }],
       },
-      newIndex: 150,
+      newIndex: 156,
     });
 
     return setup({
@@ -138,7 +138,7 @@ describe("When parsing a paragraph that looks like a paragraph from the very beg
   };
 
   test({
-    expectedNewIndex: 150,
+    expectedNewIndex: 156,
     expectedNode: {
       type: "paragraph",
       children: [{ type: "text", content: "Some paragraph" }],

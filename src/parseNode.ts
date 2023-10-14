@@ -1,3 +1,5 @@
+import { ignoreLeadingNonLineBreakWhitespace } from "./ignoreLeadingNonLineBreakWhitespace";
+import { ignoreLeadingWhitespace } from "./ignoreLeadingWhitespace";
 import { ParseParagraph } from "./parseParagraph";
 import {
   isPossiblyHeadingStart,
@@ -47,6 +49,8 @@ export const makeParseNode =
   }: Dependencies) =>
   (markdown: string, index: number) => {
     let content = "";
+
+    index = ignoreLeadingWhitespace(markdown, index);
 
     if (isPossiblyHeadingStart(markdown[index])) {
       const result = tentativelyParseHeading(markdown, index);
