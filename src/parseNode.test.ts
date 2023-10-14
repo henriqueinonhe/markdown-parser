@@ -116,4 +116,33 @@ describe("When parsing something that looks like a heading but it's not", () => 
   });
 });
 
-describe("When parsing a paragraph", () => {});
+describe("When parsing a paragraph that looks like a paragraph from the very beginning", () => {
+  const secontSetup = () => {
+    const startingIndex = 136;
+    const tentativelyParseHeading = vi.fn().mockImplementation(() => {
+      throw new Error("Should not be called!");
+    });
+    const parseParagraph = vi.fn().mockReturnValue({
+      node: {
+        type: "paragraph",
+        children: [{ type: "text", content: "Some paragraph" }],
+      },
+      newIndex: 150,
+    });
+
+    return setup({
+      parseParagraph,
+      startingIndex,
+      tentativelyParseHeading,
+    });
+  };
+
+  test({
+    expectedNewIndex: 150,
+    expectedNode: {
+      type: "paragraph",
+      children: [{ type: "text", content: "Some paragraph" }],
+    },
+    setup: secontSetup,
+  });
+});
