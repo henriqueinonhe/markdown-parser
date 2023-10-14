@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 # Promises Training
 
 > [!WARNING]  

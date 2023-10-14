@@ -8,51 +8,6 @@ const main = async () => {
   // console.log(ast)
 };
 
-const parse = (markdown: string) => {
-  // Move this down
-  const document = {
-    type: "document",
-    // TEMP
-    children: [] as Array<any>,
-  };
-
-  // BEGIN
-
-  // TEMP
-  const startIndex = ignoreLeadingWhitespace(markdown, 0);
-  const endIndex = markdown.length;
-  let index = startIndex;
-
-  while (index < endIndex) {
-    const { node, newIndex } = parseNode(markdown, index);
-
-    document.children.push(node);
-    index = newIndex;
-  }
-
-  // END
-
-  return document;
-};
-
-const parseNode = (markdown: string, index: number) => {
-  let content = "";
-
-  if (isPossibleHeadingStart(markdown[index])) {
-    const result = tentativelyParseHeading(markdown, index);
-
-    if (result.status === "Success") {
-      return {
-        node: result.node,
-        newIndex: result.newIndex,
-      };
-    }
-
-    content = result.content;
-    index = result.newIndex;
-  }
-};
-
 const tentativelyParseHeading = (markdown: string, index: number) => {
   let content = "";
   let depth = 1;
