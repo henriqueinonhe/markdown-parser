@@ -45,14 +45,16 @@ export const makeParseNode =
   ({
     tentativelyParseHeading,
     parseParagraph, // tentativelyParseUnorderedList,
-    // tentativelyParseOrderedList,
-  }: Dependencies) =>
+  } // tentativelyParseOrderedList,
+  : Dependencies) =>
   (markdown: string, index: number) => {
     let content = "";
 
     index = ignoreLeadingWhitespace(markdown, index);
 
     if (isPossiblyHeadingStart(markdown[index])) {
+      index++;
+
       const result = tentativelyParseHeading(markdown, index);
 
       if (result.status === "Success") {

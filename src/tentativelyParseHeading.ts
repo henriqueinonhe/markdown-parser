@@ -8,10 +8,12 @@ type Dependencies = {
 export const makeTentativelyParseHeading =
   ({ parseHeadingChildNode }: Dependencies) =>
   (markdown: string, index: number) => {
-    let content = "";
+    // If we got here it means that we've already
+    // read the first hash
+    let content = "#";
     let depth = 1;
 
-    while (markdown[index] === "#" && depth <= 6) {
+    while (markdown[index] === "#" && depth < 6) {
       // We store hashes here because
       // we still don't know whether this is a heading
       // or not, and in the case this isn't

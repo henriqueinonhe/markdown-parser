@@ -1,4 +1,4 @@
-# h1 Heading 
+# h1 Heading
 
 ## h2 Heading
 
@@ -11,5 +11,7 @@
 ###### h6 Heading
 
 #Looks like a heading but it's not
+####Looks like a heading but it's not
+#######Looks like a heading but it's not
 
 Some paragraph
