@@ -1,21 +1,27 @@
 import { describe, it, expect, vi } from "vitest";
 import { makeParseNode } from "./parseNode";
-import { TentativelyParseHeading } from "./tentativelyParseHeading";
+import { makeTentativelyParseHeading } from "./tentativelyParseHeading";
 import { ParseParagraph } from "./parseParagraph";
 import { loadMarkdownFromFixture } from "./testHelpers/loadMarkdownFromFixture";
+import { ParseHeadingChildNode } from "./parseHeadingChildNode";
+import { mockFnThatShouldntBeCalled } from "./testHelpers/mockFnThatShouldntBeCalled";
 
 type SetupParams = {
   startingIndex: number;
-  tentativelyParseHeading: TentativelyParseHeading;
+  parseHeadingChildNode: ParseHeadingChildNode;
   parseParagraph: ParseParagraph;
 };
 
 const setup = async ({
   startingIndex,
+  parseHeadingChildNode,
   parseParagraph,
-  tentativelyParseHeading,
 }: SetupParams) => {
   const markdown = await loadMarkdownFromFixture("parseNode");
+
+  const tentativelyParseHeading = makeTentativelyParseHeading({
+    parseHeadingChildNode,
+  });
 
   const parseNode = makeParseNode({
     tentativelyParseHeading,
@@ -36,7 +42,7 @@ type TestParams = {
 };
 
 const test = ({ expectedNewIndex, expectedNode, setup }: TestParams) => {
-  it("Returns heading node and new index", async () => {
+  it("Returns node and new index", async () => {
     const { result } = await setup();
 
     expect(result.node).toEqual(expectedNode);
@@ -47,20 +53,15 @@ const test = ({ expectedNewIndex, expectedNode, setup }: TestParams) => {
 describe("When parsing a heading", () => {
   const secondSetup = () => {
     const startingIndex = 0;
-    const tentativelyParseHeading = vi.fn().mockReturnValue({
-      status: "Success",
-      node: {
-        type: "heading",
-        depth: 1,
-        children: [{ type: "text", content: "h1 Heading " }],
-      },
+    const parseHeadingChildNode = vi.fn().mockReturnValueOnce({
+      node: { type: "text", content: "h1 Heading " },
       newIndex: 20,
     });
     const parseParagraph = vi.fn();
 
     return setup({
       parseParagraph,
-      tentativelyParseHeading,
+      parseHeadingChildNode,
       startingIndex,
     });
   };
@@ -79,11 +80,7 @@ describe("When parsing a heading", () => {
 describe("When parsing something that looks like a heading but it's not", () => {
   const secondSetup = () => {
     const startingIndex = 106;
-    const tentativelyParseHeading = vi.fn().mockReturnValue({
-      status: "Fail",
-      content: "#",
-      newIndex: 107,
-    });
+    const parseHeadingChildNode = mockFnThatShouldntBeCalled;
     const parseParagraph = vi.fn().mockReturnValue({
       node: {
         type: "paragraph",
@@ -96,7 +93,7 @@ describe("When parsing something that looks like a heading but it's not", () => 
 
     return setup({
       parseParagraph,
-      tentativelyParseHeading,
+      parseHeadingChildNode,
       startingIndex,
     });
   };
@@ -114,11 +111,9 @@ describe("When parsing something that looks like a heading but it's not", () => 
 });
 
 describe("When parsing a paragraph that looks like a paragraph from the very beginning", () => {
-  const secontSetup = () => {
+  const secondSetup = () => {
     const startingIndex = 142;
-    const tentativelyParseHeading = vi.fn().mockImplementation(() => {
-      throw new Error("Should not be called!");
-    });
+    const parseHeadingChildNode = mockFnThatShouldntBeCalled;
     const parseParagraph = vi.fn().mockReturnValue({
       node: {
         type: "paragraph",
@@ -130,7 +125,7 @@ describe("When parsing a paragraph that looks like a paragraph from the very beg
     return setup({
       parseParagraph,
       startingIndex,
-      tentativelyParseHeading,
+      parseHeadingChildNode,
     });
   };
 
@@ -140,6 +135,6 @@ describe("When parsing a paragraph that looks like a paragraph from the very beg
       type: "paragraph",
       children: [{ type: "text", content: "Some paragraph" }],
     },
-    setup: secontSetup,
+    setup: secondSetup,
   });
 });

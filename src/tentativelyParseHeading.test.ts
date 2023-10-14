@@ -5,6 +5,7 @@ import {
   makeTentativelyParseHeading,
 } from "./tentativelyParseHeading";
 import { loadMarkdownFromFixture } from "./testHelpers/loadMarkdownFromFixture";
+import { mockFnThatShouldntBeCalled } from "./testHelpers/mockFnThatShouldntBeCalled";
 
 type SetupParams = {
   parseHeadingChildNode: ParseHeadingChildNode;
@@ -274,9 +275,7 @@ describe("When parsing a line that starts with a hash sequence but doesn't have 
   };
 
   const secondSetup = ({ startIndex }: SecondSetupParams) => {
-    const parseHeadingChildNode = vi.fn().mockImplementation(() => {
-      throw new Error("Should not have been called!");
-    });
+    const parseHeadingChildNode = mockFnThatShouldntBeCalled;
 
     return setup({
       startIndex,
