@@ -1,5 +1,5 @@
-import { ignoreLeadingWhitespace } from "./ignoreLeadingWhitespace";
 import { describe, it, expect, vi } from "vitest";
+import { ignoreLeadingNonLineBreakWhitespace } from "./ignoreLeadingNonLineBreakWhitespace";
 
 type SetupParams = {
   markdown: string;
@@ -7,7 +7,7 @@ type SetupParams = {
 };
 
 const setup = ({ markdown, index }: SetupParams) => {
-  const newIndex = ignoreLeadingWhitespace(markdown, index);
+  const newIndex = ignoreLeadingNonLineBreakWhitespace(markdown, index);
 
   return { newIndex };
 };
@@ -19,7 +19,7 @@ type TestParams = {
 };
 
 const test = ({ expectedNewIndex, index, markdown }: TestParams) => {
-  it("Returns the index of the first non-whitespace character", () => {
+  it("Returns the index of the first line break or non-whitespace character", () => {
     const { newIndex } = setup({ markdown, index });
 
     expect(newIndex).toBe(expectedNewIndex);
@@ -44,7 +44,7 @@ describe("When there is a single leading tab", () => {
 
 describe("When there is a single leading newline", () => {
   test({
-    expectedNewIndex: 1,
+    expectedNewIndex: 0,
     index: 0,
     markdown: "\nKLSJd KLASDaskjd ",
   });
@@ -52,8 +52,8 @@ describe("When there is a single leading newline", () => {
 
 describe("When there are several different kinds of whitespace interleaved", () => {
   test({
-    expectedNewIndex: 13,
+    expectedNewIndex: 7,
     index: 0,
-    markdown: "  \t\n\n\t \t\t \n\n KLSJd KLASDaskjd ",
+    markdown: "  \t \t\t \nKLSJd KLASDaskjd ",
   });
 });
